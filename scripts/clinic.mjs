@@ -1497,7 +1497,7 @@ async function cmdPlans(db, flags) {
     { key: 'sessions', label: 'sessions' },
     { key: 'behind', label: 'behind', align: 'right', format: (v) => (num(v) > 0 ? String(v) : '') },
     { key: 'next_booked_on', label: 'next', format: (v) => v || 'none' },
-    { key: 'state', label: 'state', width: 30 },
+    { key: 'state', label: 'state', width: 44 },
   ]));
   console.log('\n  A plan with nothing booked is a patient deciding to stop without telling you. Call before the case goes cold.');
 }
@@ -1831,7 +1831,7 @@ async function cmdAttention(db, flags) {
     if (st.flags.includes('DROPPING OUT') || st.flags.includes('NOTHING BOOKED')) {
       rows.push({
         rank: 4, reason: 'plan_dropout', who: p.patient, ref: p.ref,
-        detail: `${p.patient} is ${num(p.sessions_done)} sessions into a ${num(p.planned_sessions)}-session plan (${p.goal})${st.behind > 0 ? `, ${st.behind} behind the agreed every-${p.every_days}-days` : ''}, last seen ${isoDate(p.last_session_on) || 'never'}, and has nothing booked. Call today and book the next one; if they have stopped, close it honestly: plan close ${p.ref} --stopped`,
+        detail: `${p.patient} has had ${num(p.sessions_done)} of the ${num(p.planned_sessions)} sessions in their plan (${p.goal})${st.behind > 0 ? `, ${st.behind} behind the agreed every-${p.every_days}-days` : ''}, last seen ${isoDate(p.last_session_on) || 'never'}, and has nothing booked. Call today and book the next one; if they have stopped, close it honestly: plan close ${p.ref} --stopped`,
       });
     }
     if (st.flags.includes('STALLED')) {
